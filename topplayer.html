@@ -6,6 +6,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <audio id="bg-music" loop hidden>
+  <source src="geometrydashthememusic.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const music = document.getElementById('bg-music');
+
+  // Resume from saved position
+  const saved = parseFloat(sessionStorage.getItem('musicTime')) || 0;
+  music.currentTime = saved;
+
+  // Save position constantly and right before leaving the page
+  setInterval(() => sessionStorage.setItem('musicTime', music.currentTime), 250);
+  window.addEventListener('beforeunload', () => {
+    sessionStorage.setItem('musicTime', music.currentTime);
+  });
+
+  // Try to play; if blocked, start on first interaction
+  music.play().catch(() => {
+    document.addEventListener('click', () => music.play(), { once: true });
+  });
+</script>
     <header>
         <nav>
             <ul>
